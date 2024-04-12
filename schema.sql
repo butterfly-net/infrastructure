@@ -65,3 +65,27 @@ CREATE TRIGGER observe_inserts
     EXECUTE FUNCTION notify_on_insert();
 
 
+create role butterflynet_access;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON PROJECTS TO butterflynet_access;
+GRANT SELECT, INSERT, UPDATE, DELETE ON RECORDS TO butterflynet_access;
+GRANT SELECT, INSERT, UPDATE, DELETE ON USERS TO butterflynet_access;
+GRANT SELECT, INSERT, UPDATE, DELETE ON USERS_OF_PROJECTS TO butterflynet_access;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TYPES TO butterflynet_access;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SELENIUM_RECORDS TO butterflynet_access;
+
+GRANT USAGE ON SEQUENCE projects_id_seq TO butterflynet_access;
+GRANT USAGE ON SEQUENCE records_id_seq TO butterflynet_access;
+GRANT USAGE ON SEQUENCE selenium_records_id_seq TO butterflynet_access;
+GRANT USAGE ON SEQUENCE types_id_seq TO butterflynet_access;
+GRANT USAGE ON SEQUENCE users_id_seq TO butterflynet_access;
+GRANT USAGE ON SEQUENCE users_of_projects_id_seq TO butterflynet_access;
+
+CREATE USER ingestion_api WITH PASSWORD 'ingestion_api_secret';
+GRANT butterflynet_access TO ingestion_api;
+CREATE USER dashboard_listener WITH PASSWORD 'dashboard_listener_secret';
+GRANT butterflynet_access TO dashboard_listener;
+CREATE USER dashboard_server WITH PASSWORD 'dashboard_server_secret';
+GRANT butterflynet_access TO dashboard_server;
+CREATE USER agent_manager WITH PASSWORD 'agent_manager_secret';
+GRANT butterflynet_access TO agent_manager;
